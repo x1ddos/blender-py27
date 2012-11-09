@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+
+{% block main %}
+  <div id="events">
+    loading...
+  </div>
+{% endblock %}
+
+{% block bottom %}
+  <script src="/utils.js"></script>
+  <script>
+    sendRequest("/list", function(resp){
+      var el = document.getElementById('events');
+      if (el) {
+        el.innerHTML = resp.responseText;
+      }
+    });
+  </script>
+{% endblock %}

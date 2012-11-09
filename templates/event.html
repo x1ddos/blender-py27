@@ -1,0 +1,116 @@
+{% extends "_base.html" %}
+
+{% block main %}
+  <div class="clearfix">
+    {% if qr_image_url %}
+      <div class="qrcode">
+        <img src="{{qr_image_url}}">
+      </div>
+    {% endif %}
+    <span class="time">{{event.human_start}}
+    ({{event.formatted_start}})</span>
+    
+    <div style="margin: 1em 0;">
+      <ul>
+        {% for url in event.links %}
+          <li>
+            <a href="{{url}}" target="_blank" rel="nofollow">{{url}}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      {{event.desc|safe}}
+    </div>
+    
+    <p>Location: {{event.place}}</p>
+  </div>
+
+  <div id="map" class="canvas" style="height: 450px;"></div>
+  
+  <p>
+    <a href="/event?id={{event.key.integer_id()}}&edit=true"
+       class="btn primary">Edit event</a>
+  </p>
+{% endblock %}
+
+{% block bottom %}
+<script type="text/javascript">
+  var map, geocoder,
+      place = null,
+      mapReady = false;
+  
+  function addMarker(location, doCenter) {
+    if (!mapReady) {
+      setTimeout(function(){
+        addMarker(location, doCenter);
+      }, 200);
+      return;
+    }
+    
+    if (doCenter) {
+      map.setCenter(location);  
+    }
+    new google.maps.Marker({
+        map: map,
+        position: location
+    });
+  }
+  
+  function geocode(address) {
+    geocoder.geocode({'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        place = results[0].geometry.location;
+        addMarker(place, true);
+      }
+    });
+  }
+  
+  function initMaps() {
+    geocoder = new google.maps.Geocoder();
+    geocode("{{event.place}}");
+    
+    var mapOptions = {
+        // Trento
+      center: new google.maps.LatLng(46.069695, 11.121093),
+      zoom: 14,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map"),
+        mapOptions);
+    mapReady = true;
+  }
+  
+  function showDirections(pos) {
+    if (!mapReady || !place) {
+      setTimeout(function(){ showDirections(pos) }, 200);
+      return;
+    }
+    
+    var start = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+        directionsService = new google.maps.DirectionsService(),
+        directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay.setMap(map);
+    
+    var request = {
+      origin:start,
+      destination:place,
+      // other modes: WALKING, BICYCLING or TRANSIT
+      travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
+      }
+    });
+  }
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showDirections, null, {
+      enableHighAccuracy: true,
+      timeout: 60000,
+      maximumAge: 0});
+  }
+</script>
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=initMaps">
+</script>
+{% endblock %}

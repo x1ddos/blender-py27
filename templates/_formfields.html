@@ -1,0 +1,27 @@
+<p><label>Title:
+  <input type="text" name="title" size="60" placeholder="Awesome event title"
+         value="{{event.title}}">
+</label></p>
+
+<p><label>When:
+  <input type="text" name="start" size="40" placeholder="next week"
+         value="{{event.start}}">
+</label></p>
+
+<p><label>Until:
+  <input type="text" name="end" size="40"
+         placeholder="e.g. 'next month' or just leave it blank"
+         value="{{event.end}}">
+</label></p>
+
+<p><label>Where:
+  <input type="text" name="place" size="60"
+         placeholder="e.g. 'via Sommarive 18, Trento'"
+         value="{{event.place}}">
+</label></p>
+
+<p><label>Description:<br>
+  <textarea style="height:250px;width:90%"
+    placeholder="Say something more about this event"
+    name="description">{{event.desc|safe}}</textarea>
+</label></p>

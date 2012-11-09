@@ -1,0 +1,10 @@
+{% extends "_base.html" %}
+
+{% block main %}
+  <form action="/event" method="post">
+    {% include '_formfields.html' %}
+    <p>
+      <button type="submit" class="primary">Submit</button>
+    </p>
+  </form>
+{% endblock %}

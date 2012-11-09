@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+
+{% block main %}
+  <form action="/event" method="post">
+    <input type="hidden" name="id" value="{{event.key.integer_id()}}">
+    {% include '_formfields.html' %}
+    <p>
+      <button type="submit" class="primary">Save changes</button>
+    </p>
+  </form>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>{{ title|default('EventsBlender', true) }}</title>
+    <link href="/main.css" type="text/css" rel="stylesheet">
+    <link href="/buttons.css" type="text/css" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <div class="container" style="padding-top:5px;">
+        <a href="/" id="logo">EventsBlender</a>
+        <a href="/event">Add event</a>
+      </div>
+    </header>
+    
+    <div role="main" class="container">
+      {% if title %}
+        <h1>{{title}}</h1>
+      {% endif %}
+      {% block main %}{% endblock %}
+    </div>
+
+    {% block bottom %}{% endblock %}
+  </body>
+</html>

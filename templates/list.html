@@ -1,0 +1,11 @@
+<ul class="toplist">
+  {% for e in events_list %}
+    <li>
+      <a href="/event?id={{e.key.integer_id()}}">{{e.title}}</a><br/>
+      {{e.human_start}}
+      at {{e.start.strftime('%H:%M')}}, in {{e.place}}
+    </li>
+  {% else %}
+    <li>No events here, yet.</li>
+  {% endfor %}
+</ul>
